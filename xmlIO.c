@@ -1227,7 +1227,9 @@ xmlInputFromFd(xmlParserInputBuffer *buf, int fd,
     }
 #endif /* LIBXML_ZLIB_ENABLED */
 
+#ifndef __wasi__
     copy = dup(fd);
+#endif
     if (copy == -1)
         return(xmlIOErr(errno));
 
@@ -1261,10 +1263,14 @@ xmlOutputDefaultOpen(xmlOutputBufferPtr buf, const char *filename,
     (void) compression;
 
     if (!strcmp(filename, "-")) {
+        #ifdef __wasi__
+            abort();
+        #else
         fd = dup(STDOUT_FILENO);
 
         if (fd < 0)
             return(xmlIOErr(errno));
+        #endif
     } else {
         int ret;
 
@@ -1527,7 +1533,9 @@ xmlParserInputBufferCreateUrl(const char *URI, xmlCharEncoding enc,
 
             if (ret == XML_ERR_OK) {
                 ret = xmlInputFromFd(buf, fd, flags);
+#ifndef __wasi__
                 close(fd);
+#endif
                 break;
             } else if (ret != XML_IO_ENOENT) {
                 break;

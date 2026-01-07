@@ -494,6 +494,7 @@ if want_catalog and want_output
     )
 endif
 
+if host_machine.system() != 'wasip1'
 ## testdso module
 
 testdso_mod = shared_module(
@@ -531,6 +532,8 @@ foreach check, deps : checks
         test(check, exe, timeout: 0, workdir: meson.current_source_dir())
     endif
 endforeach
+
+endif
 
 add_test_setup(
   'valgrind',
