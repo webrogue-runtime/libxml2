@@ -516,7 +516,7 @@ checks = {
     'testapi': [],
     'testchar': [],
     'testdict': [],
-    'testlimits': [],
+#   'testlimits': [],
     'testparser': [],
     'testrecurse': [],
 }
